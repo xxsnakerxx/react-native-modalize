@@ -274,13 +274,19 @@ export default class Modalize extends React.Component<IProps, IState> {
     const { contentHeight, modalHeight, headerHeight, footerHeight } = this.state;
     const scrollViewHeight = [];
 
+    console.log('-keyboardHeight', keyboardHeight);
+
     if (keyboardHeight) {
       const statusBarHeight = this.isIphoneX ? 48 : this.isIos ? 20 : StatusBarManager.HEIGHT;
       const height = screenHeight - keyboardHeight - headerHeight - footerHeight - this.handleHeight - statusBarHeight;
+      console.log('-height', height);
 
       if (contentHeight > height) {
         scrollViewHeight.push({ height });
-        this.setState({ keyboardEnableScroll: true });
+        this.setState({
+          keyboardEnableScroll: true,
+          keyboardHeight,
+        });
       }
     } else if (!adjustToContentHeight) {
       const height = modalHeight - headerHeight - footerHeight;
@@ -474,7 +480,10 @@ export default class Modalize extends React.Component<IProps, IState> {
       scrollViewHeight,
       keyboardEnableScroll,
       keyboardToggle,
+      keyboardHeight,
     } = this.state;
+
+    console.log('-render keyboardHeight', keyboardHeight);
 
     const scrollEnabled = contentHeight === 0 || keyboardEnableScroll;
     const marginBottom = adjustToContentHeight ? 0 : keyboardToggle ? this.handleHeight : 0;
@@ -494,8 +503,10 @@ export default class Modalize extends React.Component<IProps, IState> {
       >
         <AnimatedKeyboardAvoidingView
           behavior="position"
-          style={{ marginBottom }}
-          enabled={enabled}
+          // style={{ marginBottom }}
+          // style={{ paddingBottom }}
+          // enabled={enabled}
+          enabled={false}
         >
           <NativeViewGestureHandler
             ref={this.modalScrollView}
@@ -503,7 +514,7 @@ export default class Modalize extends React.Component<IProps, IState> {
             simultaneousHandlers={this.modalChildren}
           >
             <Animated.ScrollView
-              style={scrollViewHeight}
+              style={[scrollViewHeight, { marginBottom: keyboardHeight }]}
               bounces={enableBounces}
               onScrollBeginDrag={Animated.event(
                 [{ nativeEvent: { contentOffset: { y: this.beginScrollY } } }],
@@ -589,7 +600,8 @@ export default class Modalize extends React.Component<IProps, IState> {
               <AnimatedKeyboardAvoidingView
                 style={[s.modalize__content, this.modalizeContent, style]}
                 behavior="padding"
-                enabled={enabled}
+                // enabled={enabled}
+                enabled={false}
               >
                 {this.renderHandle()}
                 {this.renderHeader()}

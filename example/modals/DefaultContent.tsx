@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import Modalize from 'react-native-modalize';
 import faker from 'faker';
 
@@ -11,7 +11,9 @@ export default class DefaultContent extends React.PureComponent {
     <View style={s.content}>
       <Text style={s.content__heading}>Article title</Text>
       <Text style={s.content__subheading}>November 11st 2018</Text>
+      <TextInput style={s.content__input} placeholder="Type your username" />
       <Text style={s.content__paragraph}>{faker.lorem.paragraphs(8)}</Text>
+      <TextInput style={s.content__input} placeholder="Type your username" />
     </View>
   )
 
@@ -48,6 +50,18 @@ const s = StyleSheet.create({
 
     fontSize: 16,
     color: '#ccc',
+  },
+
+  content__input: {
+    paddingVertical: 15,
+    marginBottom: 10,
+
+    width: '100%',
+
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderBottomColor: '#cdcdcd',
+    borderRadius: 6,
   },
 
   content__paragraph: {
